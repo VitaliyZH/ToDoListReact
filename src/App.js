@@ -10,26 +10,33 @@ function App() {
         <a>ToDo List</a>
         <TaskWrapper data={data} />
         <input type="text" onChange={(event) => setInputText(event.target.value)}></input>
-        <button onClick={() => setData(AddTask(data, inputText))}>Add</button>
+        {console.log(data)}
+        <button onClick={() => setData(<AddTask data={data} value={inputText} />)}>Add</button>
       </header>
     </div>
   );
 }
 
-function AddTask(arr, text) {
+function AddButton() {
+  return (
+    <button>Add</button>
+  )
+}
+
+function AddTask(props) {
   let count;
-  if (arr.length === 0) {
+  if (props.data.length === 0) {
     count = 0;
   } else {
-    count = arr[arr.length - 1].id + 1;
+    count = props.data[props.data.length - 1].id + 1;
   }
   let newTask = {
     id: count,
-    value: text,
+    value: props.value,
     type: "active",
   };
-  arr.push(newTask);
-  return arr;
+  props.data.push(newTask);
+  return props.data;
 }
 
 function TaskWrapper(props) {
@@ -50,7 +57,7 @@ function TaskColumn(props) {
     <div className="TaskColumn">
       <h1>{props.name}</h1>
       {taskList.map((el) => (
-        <Task text={el.text} />
+        <Task key={el.id.toString()} text={el.value} />
       ))}
     </div>
   );
