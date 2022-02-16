@@ -4,39 +4,42 @@ import React, { useState } from "react";
 function App() {
   const [data, setData] = useState([]);
   const [inputText, setInputText] = useState("");
+
   return (
     <div className="App">
       <header className="App-header">
         <a>ToDo List</a>
         <TaskWrapper data={data} />
-        <input type="text" onChange={(event) => setInputText(event.target.value)}></input>
+        <input
+          type="text"
+          onChange={(event) => setInputText(event.target.value)}
+        ></input>
         {console.log(data)}
-        <button onClick={() => setData(<AddTask data={data} value={inputText} />)}>Add</button>
+
+        <button onClick={() => setData(AddTask(data, inputText))}>Add</button>
       </header>
     </div>
   );
 }
 
-function AddButton() {
-  return (
-    <button>Add</button>
-  )
+function AddButton(props) {
+  return <button>Add</button>;
 }
 
-function AddTask(props) {
+function AddTask(data, inputValue) {
   let count;
-  if (props.data.length === 0) {
+  if (data.length === 0) {
     count = 0;
   } else {
-    count = props.data[props.data.length - 1].id + 1;
+    count = data[data.length - 1].id + 1;
   }
   let newTask = {
     id: count,
-    value: props.value,
+    value: inputValue,
     type: "active",
   };
-  props.data.push(newTask);
-  return props.data;
+  data.push(newTask);
+  return data;
 }
 
 function TaskWrapper(props) {
