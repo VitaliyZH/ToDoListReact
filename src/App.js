@@ -4,7 +4,10 @@ import React, { useState } from "react";
 function App() {
   const [data, setData] = useState([]);
   const [inputText, setInputText] = useState("");
-
+  function addData() {
+    return addTask(data, inputText);
+  }
+  
   return (
     <div className="App">
       <header className="App-header">
@@ -16,7 +19,7 @@ function App() {
         ></input>
         {console.log(data)}
 
-        <button onClick={() => setData(AddTask(data, inputText))}>Add</button>
+        <button onClick={() => setData(addData)}>Add</button>
       </header>
     </div>
   );
@@ -26,20 +29,21 @@ function AddButton(props) {
   return <button>Add</button>;
 }
 
-function AddTask(data, inputValue) {
-  let count;
-  if (data.length === 0) {
-    count = 0;
-  } else {
-    count = data[data.length - 1].id + 1;
-  }
+function addTask(data, inputValue) {
+  let count = data.length === 0 ? 0 : data[data.length - 1].id + 1;
+
   let newTask = {
     id: count,
     value: inputValue,
     type: "active",
   };
-  data.push(newTask);
-  return data;
+  const arr = [...data, newTask];
+  return arr;
+}
+
+function deleteTask(data, id) {
+  const arr = data.filter((el) => el.id !== id);
+  return arr;
 }
 
 function TaskWrapper(props) {
@@ -60,7 +64,7 @@ function TaskColumn(props) {
     <div className="TaskColumn">
       <h1>{props.name}</h1>
       {taskList.map((el) => (
-        <Task key={el.id.toString()} text={el.value} />
+        <Task key={el.id.toString()} text={el.value} taskList={taskList} id={el.id} />
       ))}
     </div>
   );
