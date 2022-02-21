@@ -7,12 +7,17 @@ function App() {
   function addData() {
     return addTask(data, inputText);
   }
+  function deleteTask(id) {
+    const arr = data.filter((el) => el.id !== id);
+    setData(arr);
+  }
+
   
   return (
     <div className="App">
       <header className="App-header">
         <a>ToDo List</a>
-        <TaskWrapper data={data} />
+        <TaskWrapper data={data} deleteTask={deleteTask} />
         <input
           type="text"
           onChange={(event) => setInputText(event.target.value)}
@@ -23,10 +28,6 @@ function App() {
       </header>
     </div>
   );
-}
-
-function AddButton(props) {
-  return <button>Add</button>;
 }
 
 function addTask(data, inputValue) {
@@ -41,18 +42,23 @@ function addTask(data, inputValue) {
   return arr;
 }
 
-function deleteTask(data, id) {
-  const arr = data.filter((el) => el.id !== id);
-  return arr;
-}
-
 function TaskWrapper(props) {
   const activeTasks = props.data.filter((el) => el.type === "active");
   const completedTasks = props.data.filter((el) => el.type === "completed");
   return (
     <div className="TaskWrapper">
-      <TaskColumn name="Active" taskList={activeTasks} />
-      <TaskColumn name="Completed" taskList={completedTasks} />
+      <TaskColumn
+        name="Active"
+        taskList={activeTasks}
+        deleteTask={props.deleteTask}
+        
+      />
+      <TaskColumn
+        name="Completed"
+        taskList={completedTasks}
+        deleteTask={props.deleteTask}
+        
+      />
     </div>
   );
 }
@@ -64,21 +70,37 @@ function TaskColumn(props) {
     <div className="TaskColumn">
       <h1>{props.name}</h1>
       {taskList.map((el) => (
-        <Task key={el.id.toString()} text={el.value} taskList={taskList} id={el.id} />
+        <Task
+          key={el.id.toString()}
+          text={el.value}
+          id={el.id}
+          deleteTask={props.deleteTask}
+          
+        />
       ))}
     </div>
   );
 }
 
 function Task(props) {
+  
   return (
     <div className="Task">
       <input type="checkbox"></input>
       <p>{props.text}</p>
       <button>Edit</button>
-      <button>Delete</button>
+      <button onClick={() => props.deleteTask(props.id)}>Delete</button>
     </div>
   );
+}
+
+function EditWindow () {
+  return (
+    <div className="EditWindow">
+      <input type="text"></input>
+      <button>Save</button>
+    </div>
+  )
 }
 
 export default App;

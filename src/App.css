@@ -55,3 +55,8 @@
     display: flex;
     
 }
+
+.EditWindow {
+  background-color: rgb(181, 216, 124);
+  display: flex;
+}
